@@ -28,6 +28,11 @@
     NSString* origin;
     
     NSArray* runLoopModes;
+    NSString* cookie;
+
+    u_char key3[8];
+    NSData* expectedChallenge;
+    BOOL handShakeHeaderReceived;
 }
 
 @property(nonatomic,assign) id<WebSocketDelegate> delegate;
@@ -35,6 +40,7 @@
 @property(nonatomic,retain) NSString* origin;
 @property(nonatomic,readonly) BOOL connected;
 @property(nonatomic,retain) NSArray* runLoopModes;
+@property(nonatomic,retain) NSString* cookie;
 
 + (id)webSocketWithURLString:(NSString*)urlString delegate:(id<WebSocketDelegate>)delegate;
 - (id)initWithURLString:(NSString*)urlString delegate:(id<WebSocketDelegate>)delegate;
