@@ -49,7 +49,7 @@ static const NSString* randomCharacterInSecWebSocketKey = @"!\"#$%&'()*+,-./:;<=
     if (self) {
         self.delegate = aDelegate;
         url = [[NSURL URLWithString:urlString] retain];
-        if (![url.scheme isEqualToString:@"ws"]) {
+        if (![url.scheme isEqualToString:@"ws"] && ![url.scheme isEqualToString:@"wss"]) {
             [NSException raise:WebSocketException format:@"Unsupported protocol %@", url.scheme];
         }
         socket = [[AsyncSocket alloc] initWithDelegate:self];
