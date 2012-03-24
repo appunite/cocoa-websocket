@@ -211,10 +211,17 @@ static const NSString* randomCharacterInSecWebSocketKey = @"!\"#$%&'()*+,-./:;<=
             NSString* message = [[[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(1, [data length]-2)] encoding:NSUTF8StringEncoding] autorelease];
             [self _dispatchMessageReceived:message];
         } else if ([self handShakeHeaderReceived] == YES && ([data length] > [expectedChallenge length])) {
+            
+ 
             NSData *actualChallenge = [data subdataWithRange:NSMakeRange(0, [expectedChallenge length])];
             if ([expectedChallenge isEqualToData:actualChallenge]) { // got our challenge!
                 connected = YES;
                 [self _dispatchOpened];
+                
+                // fixme: why [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(1, [data length]-2)] encoding:NSUTF8StringEncoding] autorelease]; doesn't work?
+                NSString* message = @"1::";
+               [self _dispatchMessageReceived:message];
+                
             } else {
                 [self _dispatchFailure:[NSNumber numberWithInt:WebSocketErrorHandshakeFailed]];
             }
