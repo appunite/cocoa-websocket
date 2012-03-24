@@ -37,6 +37,7 @@ static const NSString* randomCharacterInSecWebSocketKey = @"!\"#$%&'()*+,-./:;<=
 @synthesize delegate, url, origin, connected, runLoopModes;
 @synthesize expectedChallenge, handShakeHeaderReceived; // needed for supporting draft-hixie-thewebsocketprotocol-76
 @synthesize cookie;
+@synthesize timeout = _timeout;
 
 #pragma mark Initializers
 
@@ -54,6 +55,9 @@ static const NSString* randomCharacterInSecWebSocketKey = @"!\"#$%&'()*+,-./:;<=
         }
         socket = [[AsyncSocket alloc] initWithDelegate:self];
         self.runLoopModes = [NSArray arrayWithObjects:NSRunLoopCommonModes, nil]; 
+        
+        // defaults
+        _timeout = 5;
     }
     return self;
 }
@@ -104,7 +108,7 @@ static const NSString* randomCharacterInSecWebSocketKey = @"!\"#$%&'()*+,-./:;<=
 
 -(void)open {
     if (!connected) {
-        [socket connectToHost:url.host onPort:[url.port intValue] withTimeout:5 error:nil];
+        [socket connectToHost:url.host onPort:[url.port intValue] withTimeout:_timeout error:nil];
         if (runLoopModes) [socket setRunLoopModes:runLoopModes];
     }
 }

@@ -33,6 +33,7 @@
     u_char key3[8];
     NSData* expectedChallenge;
     BOOL handShakeHeaderReceived;
+    NSInteger _timeout;
 }
 
 @property(nonatomic,assign) id<WebSocketDelegate> delegate;
@@ -41,6 +42,7 @@
 @property(nonatomic,readonly) BOOL connected;
 @property(nonatomic,retain) NSArray* runLoopModes;
 @property(nonatomic,retain) NSString* cookie;
+@property(nonatomic,assign) NSInteger timeout;
 
 + (id)webSocketWithURLString:(NSString*)urlString delegate:(id<WebSocketDelegate>)delegate;
 - (id)initWithURLString:(NSString*)urlString delegate:(id<WebSocketDelegate>)delegate;
