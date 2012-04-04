@@ -21,7 +21,7 @@
 @end
 
 @interface WebSocket : NSObject {
-    id<WebSocketDelegate> delegate;
+    id<WebSocketDelegate> __unsafe_unretained delegate;
     NSURL* url;
     AsyncSocket* socket;
     BOOL connected;
@@ -36,12 +36,12 @@
     NSInteger _timeout;
 }
 
-@property(nonatomic,assign) id<WebSocketDelegate> delegate;
+@property(nonatomic,unsafe_unretained) id<WebSocketDelegate> delegate;
 @property(nonatomic,readonly) NSURL* url;
-@property(nonatomic,retain) NSString* origin;
+@property(nonatomic) NSString* origin;
 @property(nonatomic,readonly) BOOL connected;
-@property(nonatomic,retain) NSArray* runLoopModes;
-@property(nonatomic,retain) NSString* cookie;
+@property(nonatomic) NSArray* runLoopModes;
+@property(nonatomic) NSString* cookie;
 @property(nonatomic,assign) NSInteger timeout;
 
 + (id)webSocketWithURLString:(NSString*)urlString delegate:(id<WebSocketDelegate>)delegate;

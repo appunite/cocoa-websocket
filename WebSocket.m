@@ -21,7 +21,7 @@ enum {
 
 // Private methods & properties
 @interface WebSocket ()
-    @property (nonatomic,retain) NSData* expectedChallenge;
+    @property (nonatomic) NSData* expectedChallenge;
     @property (nonatomic,assign) BOOL handShakeHeaderReceived;
     static NSString* _generateSecWebSocketKey(uint32_t* number);
     static void _generateKey3(u_char key3[8]);
@@ -42,14 +42,14 @@ static const NSString* randomCharacterInSecWebSocketKey = @"!\"#$%&'()*+,-./:;<=
 #pragma mark Initializers
 
 + (id)webSocketWithURLString:(NSString*)urlString delegate:(id<WebSocketDelegate>)aDelegate {
-    return [[[WebSocket alloc] initWithURLString:urlString delegate:aDelegate] autorelease];
+    return [[WebSocket alloc] initWithURLString:urlString delegate:aDelegate];
 }
 
 -(id)initWithURLString:(NSString *)urlString delegate:(id<WebSocketDelegate>)aDelegate {
     self = [super init];
     if (self) {
         self.delegate = aDelegate;
-        url = [[NSURL URLWithString:urlString] retain];
+        url = [NSURL URLWithString:urlString];
         if (![url.scheme isEqualToString:@"ws"] && ![url.scheme isEqualToString:@"wss"]) {
             [NSException raise:WebSocketException format:@"Unsupported protocol %@", url.scheme];
         }
@@ -194,7 +194,7 @@ static const NSString* randomCharacterInSecWebSocketKey = @"!\"#$%&'()*+,-./:;<=
 
 -(void)onSocket:(AsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
     if (tag == WebSocketTagHandshake) {
-        NSString* response = [[[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding] autorelease];
+        NSString* response = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
         
         if ([response hasPrefix:@"HTTP/1.1 101 WebSocket Protocol Handshake\r\nUpgrade: WebSocket\r\nConnection: Upgrade\r\n"]) {
             [self setHandShakeHeaderReceived:YES];
@@ -208,7 +208,7 @@ static const NSString* randomCharacterInSecWebSocketKey = @"!\"#$%&'()*+,-./:;<=
 
         // This is where the actual handshake challenge validation (WebSockets rev. 76) happens...
         if (firstByte == 0x00) {
-            NSString* message = [[[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(1, [data length]-2)] encoding:NSUTF8StringEncoding] autorelease];
+            NSString* message = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(1, [data length]-2)] encoding:NSUTF8StringEncoding];
             [self _dispatchMessageReceived:message];
         } else if ([self handShakeHeaderReceived] == YES && ([data length] > [expectedChallenge length])) {
             
@@ -243,7 +243,7 @@ static NSString* _generateSecWebSocketKey(uint32_t* number) {
     *number = (random() % max);
     uint32_t product = (*number) * space;
 
-    NSMutableString *s = [[[NSMutableString alloc] initWithFormat:@"%u", product] autorelease];
+    NSMutableString *s = [[NSMutableString alloc] initWithFormat:@"%u", product];
     int n = (random() % 12) + 1;
 
     for (int i = 0; i < n; i++) {
@@ -292,7 +292,7 @@ static NSData* _generateExpectedChallengeResponse(uint32_t number1, uint32_t num
     CC_MD5(challenge, 16, theExpectedChallenge);
 
     NSData *expectedChallengeData = [[NSData alloc] initWithBytes:theExpectedChallenge length:CC_MD5_DIGEST_LENGTH];
-    return [expectedChallengeData autorelease];
+    return expectedChallengeData;
 }
 
 #pragma mark Destructor
@@ -300,11 +300,6 @@ static NSData* _generateExpectedChallengeResponse(uint32_t number1, uint32_t num
 -(void)dealloc {
     socket.delegate = nil;
     [socket disconnect];
-    [socket release];
-    [runLoopModes release];
-    [url release];
-    [cookie release];
-    [super dealloc];
 }
 
 @end
