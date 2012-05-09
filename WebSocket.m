@@ -21,7 +21,7 @@ enum {
 
 // Private methods & properties
 @interface WebSocket ()
-    @property (nonatomic) NSData* expectedChallenge;
+    @property (nonatomic, strong) NSData* expectedChallenge;
     @property (nonatomic,assign) BOOL handShakeHeaderReceived;
     static NSString* _generateSecWebSocketKey(uint32_t* number);
     static void _generateKey3(u_char key3[8]);

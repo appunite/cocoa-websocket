@@ -38,10 +38,10 @@
 
 @property(nonatomic,unsafe_unretained) id<WebSocketDelegate> delegate;
 @property(nonatomic,readonly) NSURL* url;
-@property(nonatomic) NSString* origin;
+@property(nonatomic, strong) NSString* origin;
 @property(nonatomic,readonly) BOOL connected;
-@property(nonatomic) NSArray* runLoopModes;
-@property(nonatomic) NSString* cookie;
+@property(nonatomic, strong) NSArray* runLoopModes;
+@property(nonatomic, strong) NSString* cookie;
 @property(nonatomic,assign) NSInteger timeout;
 
 + (id)webSocketWithURLString:(NSString*)urlString delegate:(id<WebSocketDelegate>)delegate;
